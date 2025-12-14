@@ -1,5 +1,10 @@
 # neural_fractal
-A neural fractal generator built with <a href="https://pytorch.org/">PyTorch</a> that learns to approximate fractals such as <b>Mandelbrot</b> & <b>Julia</b>. Images are rendered progressively during training, allowing monitoring the fractal evolution in real-time.
+A neural fractal approximator built with <a href="https://pytorch.org/">PyTorch</a> that learns fractals such as: <b>Mandelbrot</b> & <b>Julia</b>. Images are rendered progressively during training, allowing monitoring the fractal evolution in real-time.
+
+<img src="fractals/mandelbrot.png" width="128" height="128">
+<img src="fractals/julia.png" width="128" height="128">
+<img src="fractals/burning_ship.png" width="128" height="128">
+<img src="fractals/newton.png" width="128" height="128">
 
 ## Features
 - Fractal presets: <code>mandelbrot</code>, <code>julia</code>, <code>burning_ship</code> & <code>newton</code>
