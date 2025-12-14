@@ -9,7 +9,7 @@ dataset:
   batch_size: 1024
 
 training:
-  epochs: 100
+  epochs: 20
   lr: 0.001
   model_path: "models/fractal_net.pth"
 

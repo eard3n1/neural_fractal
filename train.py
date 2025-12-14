@@ -4,8 +4,8 @@ from torch.utils.data import DataLoader
 from PIL import Image
 from src.config import Config
 from src.architecture.model import FractalNet
-from src.datasets.fractal_dataset import FractalDataset
-from src.targets.procedural_target import targets
+from src.datasets.fractal import FractalDataset
+from src.targets.procedural import targets
 
 def render_fractal(model, resolution=512, device="cpu"):
     x = torch.linspace(-2, 2, resolution)
