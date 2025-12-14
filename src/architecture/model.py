@@ -1,8 +1,12 @@
 import torch.nn as nn
+from .fourier import FourierFeatures
 
 class FractalNet(nn.Module):
-    def __init__(self, input_dim=2, hidden_dim=512, num_layers=4):
+    def __init__(self, hidden_dim=256, num_layers=4, num_frequencies=6):
         super().__init__()
+
+        self.encoder = FourierFeatures(num_frequencies=num_frequencies, scale=1.0)
+        input_dim = 2 + 4 * num_frequencies
 
         layers = []
         for _ in range(num_layers):
@@ -10,12 +14,9 @@ class FractalNet(nn.Module):
             layers.append(nn.ReLU())
             input_dim = hidden_dim
 
-        self.skip = nn.Linear(2, hidden_dim)
         layers.append(nn.Linear(hidden_dim, 3))
         self.model = nn.Sequential(*layers)
 
     def forward(self, x):
-        skip_out = self.skip(x)
-        hidden_out = self.model[:-1](x)
-        hidden_out = hidden_out + skip_out
-        return self.model[-1](hidden_out)
+        x = self.encoder(x)
+        return self.model(x)

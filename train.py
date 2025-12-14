@@ -38,9 +38,9 @@ if __name__ == "__main__":
     )
 
     model = FractalNet(
-        input_dim=cfg_train.get("model", "input_dim"),
         hidden_dim=cfg_train.get("model", "hidden_dim"),
-        num_layers=cfg_train.get("model", "num_layers")
+        num_layers=cfg_train.get("model", "num_layers"),
+        num_frequencies=cfg_train.get("model", "num_frequencies")   
     ).to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=cfg_train.get("training", "lr"))
@@ -69,7 +69,7 @@ if __name__ == "__main__":
             total_loss += loss.item()
 
         avg_loss = total_loss / len(dataloader)
-        print(f"Epoch {epoch+1}/{epochs} | Loss: {avg_loss:.6f}")
+        print(f"Epoch {epoch + 1}/{epochs} | Loss: {avg_loss:.6f}")
 
         img = render_fractal(model, resolution=resolution, device=device)
         img.save(output_path)

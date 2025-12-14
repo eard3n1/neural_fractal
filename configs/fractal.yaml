@@ -21,12 +21,22 @@ julia:
     b_freq: 10
     b_phase: 3
 
-sine_swirl:
-  name: "sine_swirl"
+burning_ship:
+  name: "burning_ship"
+  max_iter: 50
+  color_map:
+    r_freq: 5
+    g_freq: 7
+    g_phase: 2
+    b_freq: 11
+    b_phase: 4
+
+newton:
+  name: "newton"
   max_iter: 30
   color_map:
-    r_freq: 3
-    g_freq: 5
-    g_phase: 0
-    b_freq: 7
-    b_phase: 1
+    r_freq: 6
+    g_freq: 8
+    g_phase: 1
+    b_freq: 10
+    b_phase: 3

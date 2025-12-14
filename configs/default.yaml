@@ -1,6 +1,6 @@
 model:
-  input_dim: 2
-  hidden_dim: 512
+  num_frequencies: 6
+  hidden_dim: 256
   num_layers: 4
 
 dataset:
@@ -9,11 +9,11 @@ dataset:
   batch_size: 1024
 
 training:
-  epochs: 20
+  epochs: 40
   lr: 0.001
   model_path: "models/fractal_net.pth"
 
 generation:
   resolution: 512
   output_path: "output/fractal.png"
-  preset: "mandelbrot" # options: mandelbrot, julia & sine_swirl (does not work really well)
+  preset: "julia" # options: mandelbrot, julia, burning_ship & newton

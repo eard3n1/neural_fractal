@@ -1,9 +1,9 @@
 # neural_fractal
-A neural fractal generator built with <a href="https://pytorch.org/">PyTorch</a> that learns to approximate fractals such as <b>Mandelbrot</b>, <b>Julia</b>, & <b>Sine-Swirl</b>. Images are rendered progressively during training, allowing monitoring the fractal evolution in real-time.
+A neural fractal generator built with <a href="https://pytorch.org/">PyTorch</a> that learns to approximate fractals such as <b>Mandelbrot</b> & <b>Julia</b>. Images are rendered progressively during training, allowing monitoring the fractal evolution in real-time.
 
 ## Features
-- Supports multiple fractal presets: <code>mandelbrot</code>, <code>julia</code> & <code>sine_swirl</code>
-- Image update every epoch, reflecting current training process
+- Fractal presets: <code>mandelbrot</code>, <code>julia</code>, <code>burning_ship</code> & <code>newton</code>
+- Image updates every epoch, reflecting current training process
 - Most parameters are configurable via <b>YAML</b>
 - Supports both CPU & GPU
 
@@ -14,6 +14,7 @@ A neural fractal generator built with <a href="https://pytorch.org/">PyTorch</a>
 - Numpy
 - Pillow
 - Pyyaml
+- Math (built-in)
 
 ## Configuration
 1. Install requirements: 
