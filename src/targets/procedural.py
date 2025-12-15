@@ -11,7 +11,19 @@ def targets(coords, cfg):
     b_freq = color_map.get("b_freq", 11)
     b_phase = color_map.get("b_phase", 4)
 
+
     if preset_name == "julia":
+        """
+        Julia set
+
+        Iteration:
+            z_{n+1} = z_n^2 + c
+            z = x + iy,  c = c_x + i c_y
+
+        Real form:
+            x_{n+1} = x_n^2 - y_n^2 + c_x
+            y_{n+1} = 2 x_n y_n + c_y
+        """
         c = cfg.get("c", {"x": -0.7, "y": 0.27015})
         cx = c.get("x", -0.7)
         cy = c.get("y", 0.27015)
@@ -28,6 +40,16 @@ def targets(coords, cfg):
             div_time += mask.float()
 
     elif preset_name == "burning_ship":
+        """
+        Burning Ship fractal
+
+        Iteration:
+            z_{n+1} = (|Re(z_n)| + i|Im(z_n)|)^2 + c
+
+        Real form:
+            x_{n+1} = |x_n|^2 - |y_n|^2 + x_0
+            y_{n+1} = 2 |x_n| |y_n| + y_0
+        """
         x0 = coords[:, 0]
         y0 = coords[:, 1]
 
@@ -45,6 +67,22 @@ def targets(coords, cfg):
             div_time += mask.float()
 
     elif preset_name == "newton":
+        """
+        Newton fractal
+
+        Fractal: (f(z) = z^3 - 1)
+
+        Iteration:
+            z_{n+1} = z_n - f(z_n) / f'(z_n)
+
+        Where:
+            f(z)  = z^3 - 1
+            f'(z) = 3 z^2
+
+        Expanded real form:
+            x_{n+1} = (2/3)x_n + (x_n^2 - y_n^2) / (3(x_n^2 + y_n^2)^2)
+            y_{n+1} = (2/3)y_n - (2 x_n y_n) / (3(x_n^2 + y_n^2)^2)
+        """
         zx = coords[:, 0].clone()
         zy = coords[:, 1].clone()
 
@@ -54,21 +92,26 @@ def targets(coords, cfg):
             r2 = zx * zx + zy * zy
             denom = 3 * r2 * r2 + 1e-6
 
-            zx_new = (
-                (2 / 3) * zx
-                + (zx * zx - zy * zy) / denom
-            )
-            zy_new = (
-                (2 / 3) * zy
-                - (2 * zx * zy) / denom
-            )
+            zx_new = ((2 / 3) * zx + (zx * zx - zy * zy) / denom)
+            zy_new = ((2 / 3) * zy - (2 * zx * zy) / denom)
 
             diff = torch.sqrt((zx_new - zx) ** 2 + (zy_new - zy) ** 2)
             div_time += (diff < 1e-3).float()
 
             zx, zy = zx_new, zy_new
 
-    else:  # mandelbrot
+    elif preset_name == "mandelbrot":
+        """
+        Mandelbrot set
+
+        Iteration:
+            z_{n+1} = z_n^2 + c
+            z_0 = 0,  c = x_0 + i y_0
+
+        Real form:
+            x_{n+1} = x_n^2 - y_n^2 + x_0
+            y_{n+1} = 2 x_n y_n + y_0
+        """
         x0 = coords[:, 0]
         y0 = coords[:, 1]
 
@@ -88,9 +131,6 @@ def targets(coords, cfg):
     g = torch.sin(g_freq * norm + g_phase)
     b = torch.sin(b_freq * norm + b_phase)
 
-    rgb = torch.stack(
-        [(r + 1) / 2, (g + 1) / 2, (b + 1) / 2],
-        dim=1
-    )
+    rgb = torch.stack([(r + 1) / 2, (g + 1) / 2, (b + 1) / 2], dim=1)
 
     return rgb

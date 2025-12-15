@@ -16,4 +16,4 @@ training:
 generation:
   resolution: 512
   output_path: "output/fractal.png"
-  preset: "julia" # options: mandelbrot, julia, burning_ship & newton
+  preset: "julia" # options: julia, mandelbrot, burning_ship & newton
