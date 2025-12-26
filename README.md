@@ -6,6 +6,7 @@ A neural fractal approximator built with <a href="https://pytorch.org/">PyTorch<
 ## Features
 - Fractal presets: <code>mandelbrot</code>, <code>julia</code>, <code>burning_ship</code> & <code>newton</code>
 - Image updates every epoch, reflecting current training process
+- Interactive exploration using <b>Jupyter Notebook</b>
 - Most parameters are configurable via <b>YAML</b>
 - Supports both CPU & GPU
 
@@ -16,7 +17,8 @@ A neural fractal approximator built with <a href="https://pytorch.org/">PyTorch<
 - Numpy
 - Pillow
 - Pyyaml
-- Math (built-in)
+- Matplotlib
+- Ipywidgets
 
 ## Configuration
 1. Install requirements: 
@@ -31,6 +33,8 @@ pip install -r requirements.txt
 ```bash
 python train.py
 ```
+
+4. Open <code>notebooks/exploration.ipynb</code> to pan, zoom, and adjust resolution interactively.
 
 ## License
 MIT License
