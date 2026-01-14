@@ -22,17 +22,17 @@ A neural fractal approximator built with <a href="https://pytorch.org/">PyTorch<
 
 ## Configuration
 1. Install requirements: 
-```bash
-pip install -r requirements.txt
-```
+    ```bash
+    pip install -r requirements.txt
+    ```
 2. Most parameters are configurable via <b>YAML</b>:
-- <code>configs/default.yaml</code>: training & generation settings, including fractal preset.
-- <code>configs/fractal.yaml</code>: fractal-specific parameters for each preset.
+    - <code>configs/default.yaml</code>: training & generation settings, including fractal preset.
+    - <code>configs/fractal.yaml</code>: fractal-specific parameters for each preset.
 
 3. Train the model:
-```bash
-python train.py
-```
+    ```bash
+    python train.py
+    ```
 
 4. Open <code>notebooks/exploration.ipynb</code> to pan, zoom, and adjust resolution interactively.
 
