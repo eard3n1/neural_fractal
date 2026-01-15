@@ -11,7 +11,7 @@ dataset:
 training:
   epochs: 40
   lr: 0.001
-  model_path: "models/fractal_net.pth"
+  model_path: "model/fractal_net.pth"
 
 generation:
   resolution: 512
