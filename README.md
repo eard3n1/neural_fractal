@@ -14,11 +14,9 @@ A neural fractal approximator built with <a href="https://pytorch.org/">PyTorch<
 - Python 3.10+
 - Torch
 - Torchvision
-- Numpy
 - Pillow
 - Pyyaml
 - Matplotlib
-- Ipywidgets
 
 ## Configuration
 1. Install requirements: 
@@ -33,8 +31,6 @@ A neural fractal approximator built with <a href="https://pytorch.org/">PyTorch<
     ```bash
     python train.py
     ```
-
-4. Open <code>notebooks/exploration.ipynb</code> to pan, zoom, and adjust resolution interactively.
 
 ## License
 MIT License
