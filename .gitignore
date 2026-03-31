@@ -3,5 +3,5 @@
 __pycache__/
 *.pyc
 
-output/
+live/
 log/

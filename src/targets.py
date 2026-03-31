@@ -1,7 +1,7 @@
 import torch
 
 def targets(coords, cfg):
-    preset_name = cfg.get("name", "mandelbrot").lower()
+    preset_name = cfg.get("name", "julia")
     max_iter = cfg.get("max_iter", 50)
 
     color_map = cfg.get("color_map", {})
@@ -35,6 +35,32 @@ def targets(coords, cfg):
         for _ in range(max_iter):
             zx_new = zx * zx - zy * zy + cx
             zy_new = 2 * zx * zy + cy
+            zx, zy = zx_new, zy_new
+            mask = (zx * zx + zy * zy) < 4
+            div_time += mask.float()
+
+    elif preset_name == "mandelbrot":
+        """
+        Mandelbrot set
+
+        Iteration:
+            z_{n+1} = z_n^2 + c
+            z_0 = 0,  c = x_0 + i y_0
+
+        Real form:
+            x_{n+1} = x_n^2 - y_n^2 + x_0
+            y_{n+1} = 2 x_n y_n + y_0
+        """
+        x0 = coords[:, 0]
+        y0 = coords[:, 1]
+
+        zx = torch.zeros_like(x0)
+        zy = torch.zeros_like(y0)
+        div_time = torch.zeros_like(x0)
+
+        for _ in range(max_iter):
+            zx_new = zx * zx - zy * zy + x0
+            zy_new = 2 * zx * zy + y0
             zx, zy = zx_new, zy_new
             mask = (zx * zx + zy * zy) < 4
             div_time += mask.float()
@@ -100,37 +126,10 @@ def targets(coords, cfg):
 
             zx, zy = zx_new, zy_new
 
-    elif preset_name == "mandelbrot":
-        """
-        Mandelbrot set
-
-        Iteration:
-            z_{n+1} = z_n^2 + c
-            z_0 = 0,  c = x_0 + i y_0
-
-        Real form:
-            x_{n+1} = x_n^2 - y_n^2 + x_0
-            y_{n+1} = 2 x_n y_n + y_0
-        """
-        x0 = coords[:, 0]
-        y0 = coords[:, 1]
-
-        zx = torch.zeros_like(x0)
-        zy = torch.zeros_like(y0)
-        div_time = torch.zeros_like(x0)
-
-        for _ in range(max_iter):
-            zx_new = zx * zx - zy * zy + x0
-            zy_new = 2 * zx * zy + y0
-            zx, zy = zx_new, zy_new
-            mask = (zx * zx + zy * zy) < 4
-            div_time += mask.float()
-
     norm = div_time / max_iter
     r = torch.sin(r_freq * norm)
     g = torch.sin(g_freq * norm + g_phase)
     b = torch.sin(b_freq * norm + b_phase)
 
     rgb = torch.stack([(r + 1) / 2, (g + 1) / 2, (b + 1) / 2], dim=1)
-
     return rgb

@@ -14,8 +14,8 @@ training:
 
 generation:
   resolution: 512
-  preset: "julia" # options: julia, mandelbrot, burning_ship & newton
+  preset: "julia" #  julia | mandelbrot | burning_ship | newton
 
 paths:
-  output: "output/"
+  live: "live/"
   log: "log/"

@@ -6,8 +6,8 @@ from torch.utils.data import DataLoader
 
 from src.config import Config
 from src.architecture.model import FractalNet
-from src.dataset.fractal import FractalDataset
-from src.targets.procedural import targets
+from src.dataset import FractalDataset
+from src.targets import targets
 
 def render_fractal(model, resolution=512, device="cpu"):
     x = torch.linspace(-2, 2, resolution)
@@ -44,8 +44,8 @@ model = FractalNet(
 optimizer = torch.optim.Adam(model.parameters(), lr=default.get("training", "lr"))
 criterion = torch.nn.MSELoss()
 
-output_path = default.get("paths", "output")
-os.makedirs(os.path.dirname(output_path), exist_ok=True)
+live_path = default.get("paths", "live")
+os.makedirs(os.path.dirname(live_path), exist_ok=True)
 log_path = default.get("paths", "log")
 os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
         print(f"Epoch {epoch + 1}/{epochs} | Loss: {avg_loss:.6f}")
 
         img = render_fractal(model, resolution=resolution, device=device)
-        img.save(output_path + "fractal.png")
+        img.save(live_path + "fractal.png")
 
         if (epoch + 1) % 10 == 0 or ((epoch + 1) == epochs):
             img.save(log_path + f"epoch_{epoch + 1}.png")
