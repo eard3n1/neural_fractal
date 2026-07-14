@@ -1,16 +1,16 @@
 import torch
 
-def targets(coords, cfg):
-    preset_name = cfg.get("name", "julia")
-    max_iter = cfg.get("max_iter", 50)
 
-    color_map = cfg.get("color_map", {})
-    r_freq = color_map.get("r_freq", 5)
-    g_freq = color_map.get("g_freq", 7)
-    g_phase = color_map.get("g_phase", 2)
-    b_freq = color_map.get("b_freq", 11)
-    b_phase = color_map.get("b_phase", 4)
+def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
+    preset_name = config["name"]
+    max_iter = config["max_iter"]
 
+    color_map = config["color_map"]
+    r_freq = color_map["r_freq"]
+    g_freq = color_map["g_freq"]
+    g_phase = color_map["g_phase"]
+    b_freq = color_map["b_freq"]
+    b_phase = color_map["b_phase"]
 
     if preset_name == "julia":
         """
@@ -24,9 +24,9 @@ def targets(coords, cfg):
             x_{n+1} = x_n^2 - y_n^2 + c_x
             y_{n+1} = 2 x_n y_n + c_y
         """
-        c = cfg.get("c", {"x": -0.7, "y": 0.27015})
-        cx = c.get("x", -0.7)
-        cy = c.get("y", 0.27015)
+        c = config["c"]
+        cx = c["x"]
+        cy = c["y"]
 
         zx = coords[:, 0].clone()
         zy = coords[:, 1].clone()
@@ -118,8 +118,8 @@ def targets(coords, cfg):
             r2 = zx * zx + zy * zy
             denom = 3 * r2 * r2 + 1e-6
 
-            zx_new = ((2 / 3) * zx + (zx * zx - zy * zy) / denom)
-            zy_new = ((2 / 3) * zy - (2 * zx * zy) / denom)
+            zx_new = (2 / 3) * zx + (zx * zx - zy * zy) / denom
+            zy_new = (2 / 3) * zy - (2 * zx * zy) / denom
 
             diff = torch.sqrt((zx_new - zx) ** 2 + (zy_new - zy) ** 2)
             div_time += (diff < 1e-3).float()

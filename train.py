@@ -1,15 +1,15 @@
 import os
 import torch
 from PIL import Image
-
 from torch.utils.data import DataLoader
 
-from src.config import Config
-from src.architecture.model import FractalNet
-from src.dataset import FractalDataset
-from src.targets import targets
+from architecture.config import load_config
+from architecture.model import FractalNet
+from architecture.dataset import FractalDataset
+from architecture.targets import targets
 
-def render_fractal(model, resolution=512, device="cpu"):
+
+def render_fractal(model: torch.nn.Module, resolution: int, device: str) -> Image.Image:
     x = torch.linspace(-2, 2, resolution)
     y = torch.linspace(-2, 2, resolution)
     grid_x, grid_y = torch.meshgrid(x, y, indexing="ij")
@@ -18,45 +18,44 @@ def render_fractal(model, resolution=512, device="cpu"):
         rgb = model(coords).clamp(0, 1).cpu().numpy()
     return Image.fromarray((rgb.reshape(resolution, resolution, 3) * 255).astype("uint8"))
 
-default = Config("configs/default.yaml")
-fractals = Config("configs/fractal.yaml")
-preset = default.get("generation", "preset")
-fractal = fractals.get(preset)
+
+defaults = load_config("configs/default.yaml")
+fractals = load_config("configs/fractal.yaml")
+
+model_cfg = defaults["model"]
+dataset_cfg = defaults["dataset"]
+training_cfg = defaults["training"]
+generation_cfg = defaults["generation"]
+paths_cfg = defaults["paths"]
+
+fractal = fractals[generation_cfg["preset"]]
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-dataset = FractalDataset(
-    num_samples=default.get("dataset", "num_samples"),
-    scale=default.get("dataset", "scale")
-)
-
-dataloader = DataLoader(
-    dataset,
-    batch_size=default.get("dataset", "batch_size"),
-    shuffle=True
-)
+dataset = FractalDataset(num_samples=dataset_cfg["num_samples"],scale=dataset_cfg["scale"])
+dataloader = DataLoader(dataset, batch_size=dataset_cfg["batch_size"], shuffle=True)
 
 model = FractalNet(
-    hidden_dim=default.get("model", "hidden_dim"),
-    num_layers=default.get("model", "num_layers"),
-    num_frequencies=default.get("model", "num_frequencies")   
+    hidden_dim=model_cfg["hidden_dim"],
+    num_layers=model_cfg["num_layers"],
+    num_frequencies=model_cfg["num_frequencies"],
 ).to(device)
 
-optimizer = torch.optim.Adam(model.parameters(), lr=default.get("training", "lr"))
+optimizer = torch.optim.Adam(model.parameters(), lr=training_cfg["lr"])
 criterion = torch.nn.MSELoss()
 
-live_path = default.get("paths", "live")
+live_path = paths_cfg["live"]
 os.makedirs(os.path.dirname(live_path), exist_ok=True)
-log_path = default.get("paths", "log")
+log_path = paths_cfg["log"]
 os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
-resolution = default.get("generation", "resolution")
-epochs = default.get("training", "epochs")
+resolution = generation_cfg["resolution"]
+epochs = training_cfg["epochs"]
 
-loss_history = []
+loss_history: list[float] = []
 
 if __name__ == "__main__":
     for epoch in range(epochs):
-        total_loss = 0
+        total_loss = 0.0
         for coords in dataloader:
             coords = coords.to(device)
             target = targets(coords, fractal).to(device)
@@ -76,10 +75,10 @@ if __name__ == "__main__":
         img = render_fractal(model, resolution=resolution, device=device)
         img.save(live_path + "fractal.png")
 
-        if (epoch + 1) % 10 == 0 or ((epoch + 1) == epochs):
+        if (epoch + 1) % 10 == 0 or (epoch + 1) == epochs:
             img.save(log_path + f"epoch_{epoch + 1}.png")
 
-    with open(log_path + "log.csv", "w") as c:
-        c.write("epoch,loss\n")
+    with open(log_path + "log.csv", "w") as f:
+        f.write("epoch,loss\n")
         for i, loss in enumerate(loss_history):
-            c.write(f"{i + 1},{loss:.6f}\n")
+            f.write(f"{i + 1},{loss:.6f}\n")
