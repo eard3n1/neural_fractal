@@ -16,6 +16,7 @@ A neural fractal approximator built with <a href="https://pytorch.org/">PyTorch<
 - Pillow
 - Pyyaml
 - Matplotlib
+- Pandas
 
 ## Configuration
 1. Install requirements: 
