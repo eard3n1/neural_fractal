@@ -1,19 +1,9 @@
-mandelbrot:
-  name: "mandelbrot"
-  max_iter: 50
-  color_map:
-    r_freq: 5
-    g_freq: 7
-    g_phase: 2
-    b_freq: 11
-    b_phase: 4
-
 julia:
   name: "julia"
   max_iter: 40
   c:
     x: -0.7
-    y: 0.27015
+    y: 0.3
   color_map:
     r_freq: 6
     g_freq: 8
@@ -21,9 +11,24 @@ julia:
     b_freq: 10
     b_phase: 3
 
+mandelbrot:
+  name: "mandelbrot"
+  max_iter: 50
+  c:
+    x: -0.6
+  color_map:
+    r_freq: 5
+    g_freq: 7
+    g_phase: 2
+    b_freq: 11
+    b_phase: 4
+
 burning_ship:
   name: "burning_ship"
-  max_iter: 50
+  max_iter: 40
+  c:
+    x: -0.4
+    y: -0.4
   color_map:
     r_freq: 5
     g_freq: 7

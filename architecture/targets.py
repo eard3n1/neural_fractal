@@ -2,7 +2,7 @@ import torch
 
 
 def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
-    preset_name = config["name"]
+    name = config["name"]
     max_iter = config["max_iter"]
 
     color_map = config["color_map"]
@@ -12,7 +12,7 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
     b_freq = color_map["b_freq"]
     b_phase = color_map["b_phase"]
 
-    if preset_name == "julia":
+    if name == "julia":
         """
         Julia set
 
@@ -24,22 +24,22 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
             x_{n+1} = x_n^2 - y_n^2 + c_x
             y_{n+1} = 2 x_n y_n + c_y
         """
-        c = config["c"]
-        cx = c["x"]
-        cy = c["y"]
+
+        x = config["c"]["x"]
+        y = config["c"]["y"]
 
         zx = coords[:, 0].clone()
         zy = coords[:, 1].clone()
         div_time = torch.zeros_like(zx)
 
         for _ in range(max_iter):
-            zx_new = zx * zx - zy * zy + cx
-            zy_new = 2 * zx * zy + cy
+            zx_new = zx * zx - zy * zy + x
+            zy_new = 2 * zx * zy + y
             zx, zy = zx_new, zy_new
             mask = (zx * zx + zy * zy) < 4
             div_time += mask.float()
 
-    elif preset_name == "mandelbrot":
+    elif name == "mandelbrot":
         """
         Mandelbrot set
 
@@ -51,6 +51,9 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
             x_{n+1} = x_n^2 - y_n^2 + x_0
             y_{n+1} = 2 x_n y_n + y_0
         """
+
+        x = config["c"]["x"]
+
         x0 = coords[:, 0]
         y0 = coords[:, 1]
 
@@ -59,13 +62,13 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
         div_time = torch.zeros_like(x0)
 
         for _ in range(max_iter):
-            zx_new = zx * zx - zy * zy + x0
+            zx_new = zx * zx - zy * zy + x0 + x
             zy_new = 2 * zx * zy + y0
             zx, zy = zx_new, zy_new
             mask = (zx * zx + zy * zy) < 4
             div_time += mask.float()
 
-    elif preset_name == "burning_ship":
+    elif name == "burning_ship":
         """
         Burning Ship fractal
 
@@ -76,6 +79,9 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
             x_{n+1} = |x_n|^2 - |y_n|^2 + x_0
             y_{n+1} = 2 |x_n| |y_n| + y_0
         """
+        x = config["c"]["x"]
+        y = config["c"]["y"]
+
         x0 = coords[:, 0]
         y0 = coords[:, 1]
 
@@ -86,13 +92,13 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
         for _ in range(max_iter):
             zx_abs = torch.abs(zx)
             zy_abs = torch.abs(zy)
-            zx_new = zx_abs * zx_abs - zy_abs * zy_abs + x0
-            zy_new = 2 * zx_abs * zy_abs + y0
+            zx_new = zx_abs * zx_abs - zy_abs * zy_abs + x0 + x
+            zy_new = 2 * zx_abs * zy_abs + y0 + y
             zx, zy = zx_new, zy_new
             mask = (zx * zx + zy * zy) < 4
             div_time += mask.float()
 
-    elif preset_name == "newton":
+    elif name == "newton":
         """
         Newton fractal
 

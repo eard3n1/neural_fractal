@@ -1,7 +1,7 @@
 # neural_fractal
 A neural fractal approximator built with <a href="https://pytorch.org/">PyTorch</a> that learns fractals such as: <b>Mandelbrot</b> & <b>Julia</b>. Images are rendered progressively during training, allowing monitoring the fractal evolution in real-time.
 
-<img src="fractals/mandelbrot.png" width="128" height="128">  <img src="fractals/julia.png" width="128" height="128">  <img src="fractals/burning_ship.png" width="128" height="128">  <img src="fractals/newton.png" width="128" height="128">
+<img src="fractals/julia.png" width="128" height="128">  <img src="fractals/mandelbrot.png" width="128" height="128">  <img src="fractals/burning_ship.png" width="128" height="128">  <img src="fractals/newton.png" width="128" height="128">
 
 ## Features
 - Four fractal presets supported: Mandelbrot, Julia, Burning Ship & Newton
@@ -12,14 +12,13 @@ A neural fractal approximator built with <a href="https://pytorch.org/">PyTorch<
 ## Requirements
 - Python 3.10+
 - Torch
-- Torchvision
 - Pillow
 - Pyyaml
 - Matplotlib
 - Pandas
 
 ## Configuration
-1. Install requirements: 
+1. Install the requirements: 
     - ```bash
         pip install -r requirements.txt
         ```
