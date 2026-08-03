@@ -1,10 +1,10 @@
 julia:
   name: "julia"
-  max_iter: 40
+  iters: 40
   c:
     x: -0.7
     y: 0.3
-  color_map:
+  cmap:
     r_freq: 6
     g_freq: 8
     g_phase: 1
@@ -13,10 +13,10 @@ julia:
 
 mandelbrot:
   name: "mandelbrot"
-  max_iter: 50
+  iters: 50
   c:
     x: -0.6
-  color_map:
+  cmap:
     r_freq: 5
     g_freq: 7
     g_phase: 2
@@ -25,11 +25,11 @@ mandelbrot:
 
 burning_ship:
   name: "burning_ship"
-  max_iter: 40
+  iters: 40
   c:
     x: -0.4
     y: -0.4
-  color_map:
+  cmap:
     r_freq: 5
     g_freq: 7
     g_phase: 2
@@ -38,8 +38,8 @@ burning_ship:
 
 newton:
   name: "newton"
-  max_iter: 30
-  color_map:
+  iters: 30
+  cmap:
     r_freq: 6
     g_freq: 8
     g_phase: 1

@@ -1,16 +1,16 @@
 import torch
 
 
-def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
-    name = config["name"]
-    max_iter = config["max_iter"]
+def targets(coords: torch.Tensor, fractal: dict) -> torch.Tensor:
+    name = fractal["name"]
+    iters = fractal["iters"]
+    cmap = fractal["cmap"]
 
-    color_map = config["color_map"]
-    r_freq = color_map["r_freq"]
-    g_freq = color_map["g_freq"]
-    g_phase = color_map["g_phase"]
-    b_freq = color_map["b_freq"]
-    b_phase = color_map["b_phase"]
+    r_freq = cmap["r_freq"]
+    g_freq = cmap["g_freq"]
+    g_phase = cmap["g_phase"]
+    b_freq = cmap["b_freq"]
+    b_phase = cmap["b_phase"]
 
     if name == "julia":
         """
@@ -25,14 +25,14 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
             y_{n+1} = 2 x_n y_n + c_y
         """
 
-        x = config["c"]["x"]
-        y = config["c"]["y"]
+        x = fractal["c"]["x"]
+        y = fractal["c"]["y"]
 
         zx = coords[:, 0].clone()
         zy = coords[:, 1].clone()
         div_time = torch.zeros_like(zx)
 
-        for _ in range(max_iter):
+        for _ in range(iters):
             zx_new = zx * zx - zy * zy + x
             zy_new = 2 * zx * zy + y
             zx, zy = zx_new, zy_new
@@ -52,7 +52,7 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
             y_{n+1} = 2 x_n y_n + y_0
         """
 
-        x = config["c"]["x"]
+        x = fractal["c"]["x"]
 
         x0 = coords[:, 0]
         y0 = coords[:, 1]
@@ -61,7 +61,7 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
         zy = torch.zeros_like(y0)
         div_time = torch.zeros_like(x0)
 
-        for _ in range(max_iter):
+        for _ in range(iters):
             zx_new = zx * zx - zy * zy + x0 + x
             zy_new = 2 * zx * zy + y0
             zx, zy = zx_new, zy_new
@@ -79,8 +79,8 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
             x_{n+1} = |x_n|^2 - |y_n|^2 + x_0
             y_{n+1} = 2 |x_n| |y_n| + y_0
         """
-        x = config["c"]["x"]
-        y = config["c"]["y"]
+        x = fractal["c"]["x"]
+        y = fractal["c"]["y"]
 
         x0 = coords[:, 0]
         y0 = coords[:, 1]
@@ -89,7 +89,7 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
         zy = torch.zeros_like(y0)
         div_time = torch.zeros_like(x0)
 
-        for _ in range(max_iter):
+        for _ in range(iters):
             zx_abs = torch.abs(zx)
             zy_abs = torch.abs(zy)
             zx_new = zx_abs * zx_abs - zy_abs * zy_abs + x0 + x
@@ -120,7 +120,7 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
 
         div_time = torch.zeros_like(zx)
 
-        for _ in range(max_iter):
+        for _ in range(iters):
             r2 = zx * zx + zy * zy
             denom = 3 * r2 * r2 + 1e-6
 
@@ -132,7 +132,7 @@ def targets(coords: torch.Tensor, config: dict) -> torch.Tensor:
 
             zx, zy = zx_new, zy_new
 
-    norm = div_time / max_iter
+    norm = div_time / iters
     r = torch.sin(r_freq * norm)
     g = torch.sin(g_freq * norm + g_phase)
     b = torch.sin(b_freq * norm + b_phase)

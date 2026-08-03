@@ -4,7 +4,7 @@ model:
   num_layers: 4
 
 dataset:
-  num_samples: 100000
+  num_samples: 102400
   batch_size: 1024
 
 training:
